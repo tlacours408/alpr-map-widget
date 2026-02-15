@@ -29,7 +29,7 @@
 	
 		#map {
 			flex: 1;
-			min-height: 320px;
+			min-height: 600px;
 		}
 	
 		.row { margin: 10px 0; }
@@ -39,25 +39,27 @@
 		button { padding: 8px 10px; cursor: pointer; }
 		input[type='range'] { width: 100%; }
 	
-		/*	Why: in an iframe on phones, a side-by-side flex layout becomes unusable */
 		@media (max-width: 760px){
 			#appRoot{
 				flex-direction: column;
-				height: auto;
-				min-height: 100vh;
+				height: 100vh;
 			}
-	
+		
 			#sidebar{
-				width: 100%;
-				border-right: none;
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				z-index: 1000;
+				background: white;
+				max-height: 50vh;
+				overflow-y: auto;
 				border-bottom: 1px solid #ddd;
 			}
-	
-			/*	Why: Leaflet needs a real pixel height or it renders as a sliver */
+		
 			#map{
 				width: 100%;
-				height: 65vh;
-				min-height: 360px;
+				height: 100vh;
 				flex: none;
 			}
 		}
