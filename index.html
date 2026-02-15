@@ -1,1 +1,65 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset='utf-8'>
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
 
+	<title>ALPR Map Widget</title>
+
+	<link rel='stylesheet' href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'>
+	<link rel='stylesheet' href='https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css'>
+	<link rel='stylesheet' href='https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css'>
+
+	<style>
+		html, body { height: 100%; margin: 0; }
+		#appRoot { height: 100%; display: flex; }
+		#sidebar {
+			width: 320px;
+			padding: 12px;
+			box-sizing: border-box;
+			font-family: sans-serif;
+			border-right: 1px solid #ddd;
+		}
+		#map { flex: 1; }
+		.row { margin: 10px 0; }
+		.label { font-size: 12px; opacity: 0.85; margin-bottom: 4px; }
+		.value { font-size: 18px; font-weight: 600; }
+		.small { font-size: 12px; opacity: 0.75; }
+		button { padding: 8px 10px; cursor: pointer; }
+		input[type='range'] { width: 100%; }
+	</style>
+</head>
+<body>
+	<div id='appRoot'>
+		<div id='sidebar'>
+			<div class='row'>
+				<div class='label'>Cameras within radius</div>
+				<div id='cameraCount' class='value'>Loading…</div>
+				<div id='statusLine' class='small'></div>
+			</div>
+
+			<div class='row'>
+				<div class='label'>Radius (miles): <span id='radiusMilesLabel'>2.0</span></div>
+				<input id='radiusMiles' type='range' min='0' max='5' step='0.1' value='2'>
+				<div class='small'>Updates after you release the slider.</div>
+			</div>
+
+			<div class='row'>
+				<button id='useMyLocation'>Use my location</button>
+				<div class='small'>You can also drag the marker on the map.</div>
+			</div>
+
+			<div class='row'>
+				<div class='label'>Marker display</div>
+				<div class='small'>Points appear when zoomed in.</div>
+			</div>
+		</div>
+
+		<div id='map'></div>
+	</div>
+
+	<script src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'></script>
+	<script src='https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js'></script>
+	<script src='./app.js'></script>
+</body>
+</html>
