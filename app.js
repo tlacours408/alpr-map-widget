@@ -215,7 +215,16 @@ function forceLeafletResize(){
 
 
 function initMap(){
-	mapObj = L.map('map', { worldCopyJump: true }).setView([39.5, -98.35], 4);
+	mapObj = L.map('map', {
+		worldCopyJump: true,
+		zoomControl: false
+	}).setView([39.5, -98.35], 4);
+	
+	//	Why: default zoom controls overlap left-side UI, so we reposition them
+	L.control.zoom({
+		position: 'topright'
+	}).addTo(mapObj);
+
 
 	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		maxZoom: 19,
