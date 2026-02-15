@@ -1,3 +1,4 @@
+//	app.js
 'use strict';
 
 var mapObj = null;
@@ -36,7 +37,7 @@ function shouldShowPoints(){
 
 function rebuildClusterMarkersIfNeeded(){
 	//	Why: marker clustering with tens of thousands of points is expensive, so only show them when zoomed in
-	if (!clusterLayer) return;
+	if (!clusterLayer || !mapObj) return;
 
 	if (shouldShowPoints()){
 		if (!mapObj.hasLayer(clusterLayer)){
@@ -49,6 +50,8 @@ function rebuildClusterMarkersIfNeeded(){
 			setStatusLine('Zoom in to see points (>= ' + String(minZoomForPoints) + ').');
 		}
 	}
+
+	forceLeafletResize();
 }
 
 function haversineDistanceMeters(lat1, lon1, lat2, lon2){
@@ -191,6 +194,26 @@ function initUiRefs(){
 	});
 }
 
+function forceLeafletResize(){
+	//	Why: Leaflet often mismeasures when loaded inside responsive iframes
+	if (!mapObj) return false;
+
+	//	Why: invalidating a zero-sized container causes Leaflet to “lock in” a bad size
+	var mapEl = document.getElementById('map');
+	if (!mapEl || mapEl.clientHeight === 0 || mapEl.clientWidth === 0) return false;
+
+	setTimeout(function(){
+		mapObj.invalidateSize(true);
+	}, 50);
+
+	setTimeout(function(){
+		mapObj.invalidateSize(true);
+	}, 250);
+
+	return true;
+}
+
+
 function initMap(){
 	mapObj = L.map('map', { worldCopyJump: true }).setView([39.5, -98.35], 4);
 
@@ -216,11 +239,17 @@ function initMap(){
 	mapObj.on('zoomend', function(){
 		rebuildClusterMarkersIfNeeded();
 	});
+
+	forceLeafletResize();
 }
 
 function main(){
 	initUiRefs();
 	initMap();
+
+	window.addEventListener('resize', function(){
+		forceLeafletResize();
+	});
 
 	setStatusLine('Loading point data…');
 
@@ -231,6 +260,7 @@ function main(){
 			updateCircleAndCount();
 
 			setStatusLine('Loaded ' + String(pointList.length) + ' points. Ready.');
+			forceLeafletResize();
 			console.log('Successful: map initialized.');
 		})
 		.catch(function(errObj){
