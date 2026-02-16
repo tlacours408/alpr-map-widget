@@ -215,10 +215,12 @@ function forceLeafletResize(){
 
 
 function initMap(){
+	//	Defaulting to Minnesota because.
 	mapObj = L.map('map', {
 		worldCopyJump: true,
 		zoomControl: false
-	}).setView([39.5, -98.35], 4);
+	}).setView([46.3, -94.2], 6);
+
 	
 	//	default zoom controls overlap left-side UI, so reposition them
 	L.control.zoom({
@@ -231,7 +233,16 @@ function initMap(){
 		attribution: '&copy; OpenStreetMap contributors'
 	}).addTo(mapObj);
 
-	searchMarker = L.marker([39.5, -98.35], { draggable: true }).addTo(mapObj);
+	//	divIcon avoids bundling marker image assets just to change a color
+	var searchMarkerIcon = L.divIcon({
+		className: '',
+		html: '<div class=\'searchMarkerIcon\'></div>',
+		iconSize: [18, 18],
+		iconAnchor: [9, 9]
+	});
+	
+	searchMarker = L.marker([46.3, -94.2], { draggable: true, icon: searchMarkerIcon }).addTo(mapObj);
+
 
 	//	circle gives immediate visual feedback on the query area
 	searchCircle = L.circle([39.5, -98.35], {
