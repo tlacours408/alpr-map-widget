@@ -36,7 +36,7 @@ function shouldShowPoints(){
 }
 
 function rebuildClusterMarkersIfNeeded(){
-	//	Why: marker clustering with tens of thousands of points is expensive, so only show them when zoomed in
+	//	marker clustering with tens of thousands of points is expensive, so only show them when zoomed in
 	if (!clusterLayer || !mapObj) return;
 
 	if (shouldShowPoints()){
@@ -55,7 +55,7 @@ function rebuildClusterMarkersIfNeeded(){
 }
 
 function haversineDistanceMeters(lat1, lon1, lat2, lon2){
-	//	Why: stable, dependency-free distance check for “point within radius” across large areas
+	//	stable, dependency-free distance check for "point within radius" across large areas
 	var rad = Math.PI / 180;
 
 	var dLat = (lat2 - lat1) * rad;
@@ -95,7 +95,7 @@ function updateCircleAndCount(){
 	searchCircle.setLatLng(centerLatLng);
 	searchCircle.setRadius(radiusMetersValue);
 
-	//	Why: MVP is “after release,” so brute-force counting is acceptable here, and easy to validate
+	//	MVP so brute-force counting is acceptable here, and easy to validate
 	var countValue = countPointsInCircle(centerLatLng.lat, centerLatLng.lng, radiusMetersValue);
 	setCountText(countValue);
 
@@ -145,7 +145,7 @@ function onUseMyLocationClick(){
 function buildClusterLayer(){
 	var i = 0;
 
-	//	Why: clustering reduces DOM load once zoomed in enough to display points
+	//	clustering reduces DOM load once zoomed in enough to display points
 	clusterLayer = L.markerClusterGroup({
 		disableClusteringAtZoom: 14,
 		showCoverageOnHover: false,
@@ -158,7 +158,7 @@ function buildClusterLayer(){
 }
 
 function loadDeflockJson(){
-	//	Why: fetch keeps hosting dead-simple on GitHub Pages
+	//	fetch keeps hosting dead-simple on GitHub Pages
 	return fetch('./deflockPoints.json')
 		.then(function(responseObj){
 			if (!responseObj.ok){
@@ -188,17 +188,17 @@ function initUiRefs(){
 
 	document.getElementById('useMyLocation').addEventListener('click', onUseMyLocationClick);
 
-	//	Why: use change (not input) so it updates after release for MVP performance
+	//	use change (not input) so it updates after release performance
 	radiusMilesInput.addEventListener('change', function(){
 		updateCircleAndCount();
 	});
 }
 
 function forceLeafletResize(){
-	//	Why: Leaflet often mismeasures when loaded inside responsive iframes
+	//	Leaflet often mismeasures when loaded inside responsive iframes
 	if (!mapObj) return false;
 
-	//	Why: invalidating a zero-sized container causes Leaflet to “lock in” a bad size
+	//	invalidating a zero-sized container causes Leaflet to "lock in" a bad size
 	var mapEl = document.getElementById('map');
 	if (!mapEl || mapEl.clientHeight === 0 || mapEl.clientWidth === 0) return false;
 
@@ -220,7 +220,7 @@ function initMap(){
 		zoomControl: false
 	}).setView([39.5, -98.35], 4);
 	
-	//	Why: default zoom controls overlap left-side UI, so we reposition them
+	//	default zoom controls overlap left-side UI, so reposition them
 	L.control.zoom({
 		position: 'topright'
 	}).addTo(mapObj);
@@ -233,14 +233,14 @@ function initMap(){
 
 	searchMarker = L.marker([39.5, -98.35], { draggable: true }).addTo(mapObj);
 
-	//	Why: circle gives immediate visual feedback on the query area
+	//	circle gives immediate visual feedback on the query area
 	searchCircle = L.circle([39.5, -98.35], {
 		radius: milesToMeters(Number(document.getElementById('radiusMiles').value)),
 		weight: 2,
 		fillOpacity: 0.15
 	}).addTo(mapObj);
 
-	//	Why: count should update after the user finishes dragging for MVP responsiveness
+	//	count should update after the user finishes dragging
 	searchMarker.on('dragend', function(){
 		updateCircleAndCount();
 	});
