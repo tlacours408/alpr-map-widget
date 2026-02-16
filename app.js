@@ -251,6 +251,14 @@ function initMap(){
 		fillOpacity: 0.15
 	}).addTo(mapObj);
 
+	//	Why: click-to-set is faster than dragging on mobile and avoids “fighting the map”
+	mapObj.on('click', function(evtObj){
+		if (!evtObj || !evtObj.latlng) return;
+		setSearchCenter(evtObj.latlng.lat, evtObj.latlng.lng, false);
+	});
+
+
+	
 	//	count should update after the user finishes dragging
 	searchMarker.on('dragend', function(){
 		updateCircleAndCount();
