@@ -219,7 +219,7 @@ function initMap(){
 	mapObj = L.map('map', {
 		worldCopyJump: true,
 		zoomControl: false
-	}).setView([46.3, -94.2], 8);
+	}).setView([46.3, -94.2], 11);
 
 	
 	//	default zoom controls overlap left-side UI, so reposition them
