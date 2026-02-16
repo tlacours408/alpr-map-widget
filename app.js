@@ -109,7 +109,8 @@ function setSearchCenter(latValue, lonValue, shouldRecenterMap){
 	searchCircle.setLatLng(latLngObj);
 
 	if (shouldRecenterMap){
-		mapObj.setView(latLngObj, Math.max(mapObj.getZoom(), minZoomForPoints));
+		//mapObj.setView(latLngObj, Math.max(mapObj.getZoom(), minZoomForPoints));
+		mapObj.panTo(latLngObj);
 	}
 
 	updateCircleAndCount();
